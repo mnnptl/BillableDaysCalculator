@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de jours facturables pour freelance</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: transparent !important;
+            padding: 20px;
+        }
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .calculator h2 {
+            font-family: "Inter", sans-serif;
+            font-size: 120%;
+            font-weight: 600 !important;
+        }
+        .input-group {
+            font-family: "Inter", sans-serif;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+        label {
+            font-family: "Inter", sans-serif;
+            font-weight: 300 !important;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            font-family: "Inter", sans-serif;
+            font-weight: 300;
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .results {
+            font-family: "Inter", sans-serif;
+            font-weight: 500 !important;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const BillableDaysCalculator = () => {
+            const [workdays, setWorkdays] = React.useState(220); // Valeur par défaut
+            const [hoursPerDay, setHoursPerDay] = React.useState(7);
+            const [adminDays, setAdminDays] = React.useState(15);
+            const [marketingDays, setMarketingDays] = React.useState(18);
+            const [trainingDays, setTrainingDays] = React.useState(12);
+            const [billableDays, setBillableDays] = React.useState(0);
+
+            React.useEffect(() => {
+                const calculatedBillableDays = workdays - adminDays - marketingDays - trainingDays;
+                setBillableDays(calculatedBillableDays);
+            }, [workdays, adminDays, marketingDays, trainingDays]);
+
+            return (
+                <div className="calculator">
+                    <h2>Calculateur de jours facturables par an</h2>
+                    <div className="input-group">
+                        <label htmlFor="workdays">📅 Jours travaillés par an</label>
+                        <input
+                            id="workdays"
+                            type="number"
+                            value={workdays}
+                            onChange={(e) => setWorkdays(Number(e.target.value))}
+                            min="0"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="hoursPerDay">🕓 Heures travaillées par jour</label>
+                        <input
+                            id="hoursPerDay"
+                            type="number"
+                            value={hoursPerDay}
+                            onChange={(e) => setHoursPerDay(Number(e.target.value))}
+                            min="1"
+                            max="24"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="adminDays">🖋️ Jours d'administratif et de gestion</label>
+                        <input
+                            id="adminDays"
+                            type="number"
+                            value={adminDays}
+                            onChange={(e) => setAdminDays(Number(e.target.value))}
+                            min="0"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="marketingDays">💼 Jours de prospection et marketing</label>
+                        <input
+                            id="marketingDays"
+                            type="number"
+                            value={marketingDays}
+                            onChange={(e) => setMarketingDays(Number(e.target.value))}
+                            min="0"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="trainingDays">📚 Jours de formation et veille</label>
+                        <input
+                            id="trainingDays"
+                            type="number"
+                            value={trainingDays}
+                            onChange={(e) => setTrainingDays(Number(e.target.value))}
+                            min="0"
+                        />
+                    </div>
+                    <div className="results">
+                        <p>➡️ Nombre de jours facturables par an : {billableDays}</p>
+                        <p>➡️ Nombre d'heures facturables par an : {billableDays * hoursPerDay}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<BillableDaysCalculator />, document.getElementById('root'));
+    </script>
+</body>
+</html>
